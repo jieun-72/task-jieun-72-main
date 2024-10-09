@@ -1,0 +1,34 @@
+name: Autograding Tests
+'on':
+- push
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: dell
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Copy local test code
+      run: mkdir -p ./app/src/test/java/ && cp -r /home/jwkim/solution/hw3/* ./app/src/test/java/
+
+    - name: test
+      id: test
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test
+        setup-command: ''
+        command: "./gradlew clean test"
+        timeout: 10
+        max-score: 10
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST_RESULTS: "${{steps.test.outputs.result}}"
+      with:
+        runners: test
