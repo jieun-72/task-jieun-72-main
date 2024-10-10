@@ -1,8 +1,5 @@
 package task;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import task.management.Project;
 import task.management.Task;
 import task.management.TaskManager;
